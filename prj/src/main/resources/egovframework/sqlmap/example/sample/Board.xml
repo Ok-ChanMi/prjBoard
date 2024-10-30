@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="WriteSpace">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="boardVO" type="egovframework.example.sample.service.BoardVO"/>
+	
+	<insert id="boardDAO.InsertBoard" >
+		<![CDATA[
+        INSERT INTO tb_board (author, userPwd, title, contents, fileName, uploadFile, viewCount, indate) 
+        VALUES (
+        		  #author#
+        		, #userPwd#
+        		, #title#
+        		, #contents#
+        		, #fileName#
+        		, #uploadFile#
+        		, 0
+        		, CURRENT_TIMESTAMP
+        		)
+		]]>
+	</insert>
+	
+	 <select id="boardDAO.SelectBoardList" resultClass="egovMap" >
+	
+		SELECT idx, title, author
+			, DATE_FORMAT(indate,'%Y-%m-%d') as indate
+			, viewCount
+		FROM tb_board
+		<isNotNull property="SearchConditions">
+			<isNotNull property="SearchWord">
+				WHERE $SearchConditions$ LIKE '%$SearchWord$%'
+			</isNotNull>
+		</isNotNull>
+		ORDER BY idx DESC
+		LIMIT #startIndex#, #endIndex#
+	
+	</select> 
+	
+	
+	<select id="boardDAO.selectBoardDetail" resultClass="boardVO" >
+		Select 
+			idx
+			, title
+			, contents
+			, author
+			, DATE_FORMAT(indate,'%Y-%m-%d') as indate
+			, viewCount
+			, fileName
+			, uploadFile
+		from tb_board
+				where idx=#idx#
+	</select>
+	
+	<delete id="boardDAO.boardDelete">
+		delete from tb_board where idx=#idx#
+	</delete>
+	
+	
+	<update id="boardDAO.updateBoard">
+		update tb_board set contents=#contents#, fileName=#fileName#, uploadFile=#uploadFile# where idx=#idx#
+	</update>
+	
+	
+	<select id="boardDAO.selectTBBoardTotal" resultClass="java.lang.Integer">
+		select count(*) total from tb_board
+			<isNotNull property="SearchConditions">
+				<isNotNull property="SearchWord">
+					WHERE $SearchConditions$ LIKE '%$SearchWord$%'
+				</isNotNull>
+			</isNotNull>
+	</select>
+	
+	
+	<update id="boardDAO.updateBoardViewcount">
+		update tb_board set viewCount = viewCount + 1 where idx=#idx#
+	</update>
+	
+	<select id="boardDAO.selectBoardPass" resultClass="java.lang.Integer">
+		SELECT COUNT(*) FROM tb_Board where idx=#idx# AND userPwd=#userPwd#
+	</select>
+	
+	<update id="boardDAO.deleteFile">
+	<![CDATA[
+		UPDATE tb_board 
+			SET uploadFile = (
+			    SELECT GROUP_CONCAT(fileName SEPARATOR ',') 
+			    FROM (
+			        SELECT fileName 
+			        FROM tb_board 
+			        WHERE idx = #idx# 
+			        AND fileName <> #uploadFile#  -- 삭제할 파일 이름
+			    ) AS temp
+			)
+			WHERE idx = #idx#
+			]]>
+	</update>
+	
+	<delete id="boardDAO.deleteFileName">
+		DELETE FROM tb_board 
+		WHERE idx = #idx# 
+		AND fileName = #fileName#;
+	</delete>
+	
+</sqlMap>

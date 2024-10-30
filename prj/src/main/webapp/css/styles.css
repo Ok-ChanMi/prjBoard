@@ -1,0 +1,84 @@
+body {
+    margin: 20px;
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;
+}
+
+h5 {
+    text-align: center;
+    color: #333;
+}
+
+table {
+    width: 800px;
+    border-collapse: collapse;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    border: 1px solid #dddddd;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #508ED9;
+    color: white;
+}
+
+td {
+    background-color: #f9f9f9;
+}
+
+a {
+    color: #508ED9;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+button {
+    background-color: #508ED9; /* 저장 버튼 색상 */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+button.cancel {
+    background-color: #F8F9FA; /* 취소 버튼 색상 */
+    color: #333;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+form {
+    text-align: center;
+    margin: 20px auto;
+}
+
+div.pagination {
+    text-align: center;
+    margin: 20px auto;
+}
+
+div.pagination a {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #508ED9;
+    color: #508ED9;
+    border-radius: 5px;
+}
+
+div.pagination a:hover {
+    background-color: #508ED9;
+    color: white;
+}
